@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.Arrays;
+
 public class SimpleMathService implements MathService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int compare(int value1, int value2) {
-        return -2;
+        return Integer.compare(value1, value2);
     }
 
     /**
@@ -22,7 +24,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int value1, int value2) {
-        return -1;
+        return Integer.max(value1, value2);
     }
 
     /**
@@ -31,7 +33,10 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int[] values) {
-        return -1;
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        return Arrays.stream(values).max().orElseThrow(IllegalArgumentException::new);
     }
 
     /**
@@ -40,7 +45,10 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int sum(int[] values) {
-        return -1;
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        return Arrays.stream(values).sum();
     }
 
     /**
@@ -49,7 +57,10 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] getEvenDigits(int[] values) {
-        return new int[]{};
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        return Arrays.stream(values).filter(element -> element % 2 == 0).toArray();
     }
 
     /**
@@ -59,7 +70,17 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public long calcFactorial(int initialVal) {
-        return -1L;
+        if (initialVal < 0) {
+            throw new IllegalArgumentException("Факториал отрицательного числа не существует");
+        }
+        if (initialVal == 0) {
+            return 1L;
+        }
+        long factorial = 1;
+        for (int i = 1; i <= initialVal; ++i) {
+            factorial *= i;
+        }
+        return factorial;
     }
 
     /**
@@ -74,7 +95,20 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public long calcFibonacci(int number) {
-        return -1L;
+        if (number < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (number == 0) {
+            return 0;
+        }
+
+        long prevElement = 0;
+        long currElement = 1;
+        for (int i = 1; i < number; i++) {
+            currElement += prevElement;
+            prevElement = currElement - prevElement;
+        }
+        return currElement;
     }
 
     /**
@@ -83,7 +117,12 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] sort(int[] values) {
-        return new int[]{};
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        int[] resultArray = Arrays.copyOf(values, values.length);
+        Arrays.sort(resultArray);
+        return resultArray;
     }
 
     /**
@@ -94,7 +133,19 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public boolean isPrimary(int number) {
-        return false;
+        if (number == 2) {
+            return true;
+        }
+        if (number <= 1 || number % 2 == 0) {
+            return false;
+        }
+        int divider = 3;
+        while (divider < number) {
+            if (number % divider == 0)
+                break;
+            divider += 2;
+        }
+        return divider >= number;
     }
 
     /**
@@ -104,6 +155,13 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] reverseArray(int[] values) {
-        return new int[]{};
+        if (values == null) {
+            throw new NullPointerException();
+        }
+        int[] resultArray = new int[values.length];
+        for (int i = 0; i < values.length; i++) {
+            resultArray[i] = values[values.length - i - 1];
+        }
+        return resultArray;
     }
 }
